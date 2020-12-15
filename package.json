@@ -1,22 +1,27 @@
 {
-  "name": "homework-nodejs",
-  "version": "1.0.0",
-  "description": "all nodejs homeworks",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/dmytrosch/homework-nodejs.git"
-  },
-  "author": "",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/dmytrosch/homework-nodejs/issues"
-  },
-  "homepage": "https://github.com/dmytrosch/homework-nodejs#readme",
-  "devDependencies": {
-    "nodemon": "^2.0.6"
-  }
+    "name": "homework-nodejs",
+    "version": "1.0.0",
+    "description": "all nodejs homeworks",
+    "main": "index.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "start": "node index.js",
+        "dev": "nodemon index.js"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/dmytrosch/homework-nodejs.git"
+    },
+    "author": "",
+    "license": "ISC",
+    "bugs": {
+        "url": "https://github.com/dmytrosch/homework-nodejs/issues"
+    },
+    "homepage": "https://github.com/dmytrosch/homework-nodejs#readme",
+    "devDependencies": {
+        "nodemon": "^2.0.6"
+    },
+    "dependencies": {
+        "yargs": "^16.2.0"
+    }
 }
