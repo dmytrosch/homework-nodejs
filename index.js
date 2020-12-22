@@ -1,13 +1,7 @@
 const contactsMethods = require("./contacts");
 // const argv = require("yargs").argv;
-const express = require("express");
-const cors = require("cors");
-const morgan = require("morgan");
-const joi = require("joi");
-const app = express();
-const dotenv = require("dotenv");
 
-dotenv.config();
+
 
 const port = process.env.PORT || 8080;
 
@@ -18,7 +12,7 @@ app.use(morgan("dev"));
 app.get("/api/contacts", async (req, res) => {
     try {
         const contactsToSend = await contactsMethods.listContacts();
-        res.json(contactsToSend);
+        res.status(200).json(contactsToSend);
     } catch {
         res.status(500).json({ message: "Problems with server" });
     }
@@ -29,7 +23,7 @@ app.get("/api/contacts/:contactId", async (req, res) => {
             req.params.contactId
         );
         if (contactToSend) {
-            res.json(contactToSend);
+            res.status(200).json(contactToSend);
         } else {
             res.status(404).json({ message: "User not found" });
         }

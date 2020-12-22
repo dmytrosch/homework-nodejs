@@ -1,7 +1,7 @@
 const path = require("path");
 const fsPromises = require("fs").promises;
 
-const contactsPath = path.join(__dirname, "./db/contacts.json");
+const contactsPath = path.join(__dirname, "../../db/contacts.json");
 
 function rewriteContactList(newData) {
     fsPromises.writeFile(contactsPath, JSON.stringify(newData), "utf-8");
