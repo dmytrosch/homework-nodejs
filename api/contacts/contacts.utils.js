@@ -51,15 +51,13 @@ async function updateContact(id, fieldsToPatch) {
             if (item.id == id) {
                 updatedContact = { ...item, ...fieldsToPatch };
                 return updatedContact;
-            } else {
-                return item;
             }
+            return item;
         });
         rewriteContactList(newList);
         return updatedContact;
-    } else {
-        return undefined;
     }
+    return undefined;
 }
 
 module.exports = {

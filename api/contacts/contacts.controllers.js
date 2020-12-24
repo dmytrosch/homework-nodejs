@@ -15,11 +15,11 @@ const contactsControllers = {
             const contactToSend = await contactsMethods.getContactById(
                 req.params.contactId
             );
-            if (contactToSend) {
-                res.status(200).json(contactToSend);
-            } else {
+            if (!contactToSend) {
                 res.status(404).json({ message: "User not found" });
+                return;
             }
+            res.status(200).json(contactToSend);
         } catch {
             res.status(500).json({ message: "Problems with server" });
         }
@@ -42,12 +42,12 @@ const contactsControllers = {
             const contactToRemove = await contactsMethods.getContactById(
                 req.params.contactId
             );
-            if (contactToRemove) {
-                await contactsMethods.removeContact(req.params.contactId);
-                res.status(200).json({ message: "contact deleted" });
-            } else {
+            if (!contactToRemove) {
                 res.status(404).json({ message: "User not found" });
+                return;
             }
+            await contactsMethods.removeContact(req.params.contactId);
+            res.status(200).json({ message: "contact deleted" });
         } catch {
             res.status(500).json({ message: "Problems with server" });
         }
