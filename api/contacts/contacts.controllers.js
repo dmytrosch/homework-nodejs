@@ -48,7 +48,7 @@ const contactsControllers = {
             name: joi.string().required(),
             email: joi.string().email().required(),
             phone: joi.string().required(),
-            subscription: joi.string().required(),
+            subscription: joi.string().valid("free", "pro", "premium"),
             password: joi.string().required(),
             token: joi.string(),
         });
@@ -69,7 +69,7 @@ const contactsControllers = {
             name: joi.string(),
             email: joi.string().email(),
             phone: joi.string(),
-            subscription: joi.string(),
+            subscription: joi.string().valid("free", "pro", "premium"),
             password: joi.string(),
             token: joi.string(),
         });

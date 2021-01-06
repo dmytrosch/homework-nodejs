@@ -6,10 +6,11 @@ const ContactSchema = new mongoose.Schema({
     subscription: {
         type: String,
         enum: ["free", "pro", "premium"],
+        default: "free",
     },
     password: { type: String, required: true },
-    token: { type: String, required: false, default: "" },
+    token: { type: String, default: "" },
 });
-const ContactModel = mongoose.model("contacts", ContactSchema);
+const ContactModel = mongoose.model("contact", ContactSchema);
 
 module.exports = ContactModel;

@@ -18,7 +18,7 @@ module.exports = class UsersServer {
         this.connectToDB();
         this.initMiddlewares();
         this.initRoutes();
-        this.serverErrorHandler();
+        this.initServerErrorHandler();
         this.startListening();
     }
     initServer() {
@@ -34,7 +34,6 @@ module.exports = class UsersServer {
             });
             console.log("Database connection successful");
         } catch (err) {
-            console.log(err);
             process.exit(1);
         }
     }
@@ -51,7 +50,7 @@ module.exports = class UsersServer {
             console.log("server started on port ", this.port)
         );
     }
-    serverErrorHandler() {
+    initServerErrorHandler() {
         this.server.use((error, req, res, next) => {
             res.status(500).json({ message: error.message });
         });
