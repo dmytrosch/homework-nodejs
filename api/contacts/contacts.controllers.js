@@ -3,9 +3,12 @@ const joi = require("joi");
 
 const contactsControllers = {
     async getAllContacts(req, res) {
-        const { limit = 20, page = 1 } = req.query;
+        const { limit = 20, page = 1, sub } = req.query;
         const paginateOptions = { page, limit };
-        const contacts = await ContactsModel.paginate({}, paginateOptions);
+        const contacts = await ContactsModel.paginate(
+            { subscription: sub },
+            paginateOptions
+        );
         res.status(200).json(contacts);
     },
     async getContact(req, res) {
