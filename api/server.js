@@ -7,7 +7,7 @@ const contactsRouter = require("./contacts/contacts.router");
 
 dotenv.config();
 
-module.exports = class UsersServer {
+module.exports = class Server {
     constructor() {
         this.server = null;
         this.port = process.env.PORT || 8080;
