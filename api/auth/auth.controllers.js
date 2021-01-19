@@ -63,6 +63,11 @@ const authorization = async (req, res, next) => {
 const gettingCurrentUser = (req, res, next) => {
     res.status(200).json(new UserBodyResponse(req.user));
 };
+const logout = async (req, res, next) => {
+    req.user.token = "";
+    await req.user.save();
+    res.sendStatus(204);
+};
 
 const credentialsValidation = (req, res, next) => {
     const validationSchema = joi.object({
@@ -83,4 +88,5 @@ module.exports = {
     login,
     authorization,
     gettingCurrentUser,
+    logout,
 };
