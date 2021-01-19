@@ -4,11 +4,14 @@ const {
     register,
     credentialsValidation,
     login,
+    authorization,
+    gettingCurrentUser,
 } = require("./auth.controllers");
 
 const authRouter = express.Router();
 
 authRouter.post("/register", credentialsValidation, asyncWrapper(register));
 authRouter.post("/login", credentialsValidation, asyncWrapper(login));
+authRouter.get("/current-user", authorization, gettingCurrentUser);
 
 module.exports = authRouter;
