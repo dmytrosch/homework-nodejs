@@ -1,12 +1,8 @@
 const joi = require("joi");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-const UserModel = require("./auth.model");
-
-function UserBodyResponse({ email, subscription }) {
-    this.email = email;
-    this.subscription = subscription;
-}
+const UserModel = require("../users/users.model");
+const UserBodyResponse = require("../utils/UserBodyResponseConstructor");
 
 const register = async (req, res, next) => {
     const { password, email } = req.body;
@@ -60,9 +56,6 @@ const authorization = async (req, res, next) => {
         res.status(401).json({ message: "Not authorized" });
     }
 };
-const gettingCurrentUser = (req, res, next) => {
-    res.status(200).json(new UserBodyResponse(req.user));
-};
 const logout = async (req, res, next) => {
     req.user.token = "";
     await req.user.save();
@@ -87,6 +80,5 @@ module.exports = {
     credentialsValidation,
     login,
     authorization,
-    gettingCurrentUser,
     logout,
 };
