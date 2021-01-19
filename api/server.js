@@ -5,6 +5,7 @@ const mongoose = require("mongoose");
 const dotenv = require("dotenv");
 const contactsRouter = require("./contacts/contacts.router");
 const authRouter = require("./auth/auth.router");
+const usersRouter = require("./users/users.router");
 
 dotenv.config();
 
@@ -46,6 +47,7 @@ module.exports = class Server {
     initRoutes() {
         this.server.use("/api/contacts", contactsRouter);
         this.server.use("/api/auth", authRouter);
+        this.server.use("/api/users", usersRouter);
     }
     startListening() {
         this.server.listen(this.port, () =>
