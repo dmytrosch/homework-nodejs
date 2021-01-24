@@ -6,9 +6,9 @@ const UserBodyResponse = require("../utils/UserBodyResponseConstructor");
 
 const register = async (req, res, next) => {
     const { password, email } = req.body;
-    const hashedPassword = await bcrypt.hash(password, 6);
-    const isUniqueEmail = !Boolean(await UserModel.findOne({ email }));
-    if (!isUniqueEmail) {
+    const hashedPassword = await UserModel.hashPassword(password);
+    const existingUser = await UserModel.findOne({ email });
+    if (existingUser) {
         res.status(409).json({ message: "Email in use!" });
         return;
     }
