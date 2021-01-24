@@ -15,9 +15,9 @@ module.exports = class Server {
         this.port = process.env.PORT || 8080;
         this.db_url = process.env.MONGO_DB_URL;
     }
-    start() {
+    async start() {
         this.initServer();
-        this.connectToDB();
+        await this.connectToDB();
         this.initMiddlewares();
         this.initRoutes();
         this.initServerErrorHandler();
