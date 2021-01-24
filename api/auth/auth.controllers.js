@@ -41,21 +41,6 @@ const login = async (req, res, next) => {
     user.save();
     res.status(200).json({ token, user: new UserBodyResponse(user) });
 };
-const authorization = async (req, res, next) => {
-    try {
-        const authorizationHeader = req.get("Authorization");
-        const [_, token] = authorizationHeader.split(" ");
-        const payload = jwt.verify(token, process.env.JWT_SECRET);
-        const user = await UserModel.findById(payload.id);
-        if (!user) {
-            throw new Error();
-        }
-        req.user = user;
-        next();
-    } catch {
-        res.status(401).json({ message: "Not authorized" });
-    }
-};
 const logout = async (req, res, next) => {
     req.user.token = "";
     await req.user.save();
@@ -79,6 +64,5 @@ module.exports = {
     register,
     credentialsValidation,
     login,
-    authorization,
     logout,
 };

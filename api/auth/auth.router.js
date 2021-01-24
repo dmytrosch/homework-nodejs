@@ -4,9 +4,9 @@ const {
     register,
     credentialsValidation,
     login,
-    authorization,
     logout,
 } = require("./auth.controllers");
+const authorization = require('../middlewares/authorization')
 
 const authRouter = express.Router();
 

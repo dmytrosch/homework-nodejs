@@ -4,7 +4,7 @@ const {
     changeSubscription,
     validateChangingSubscription,
 } = require("./users.controllers");
-const { authorization } = require("../auth/auth.controllers");
+const authorization = require("../middlewares/authorization");
 const asyncWrapper = require("../utils/asyncWrapper");
 
 const UsersRouter = Router();
