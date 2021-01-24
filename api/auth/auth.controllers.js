@@ -1,6 +1,4 @@
 const joi = require("joi");
-const bcrypt = require("bcrypt");
-const jwt = require("jsonwebtoken");
 const UserModel = require("../users/users.model");
 const UserBodyResponse = require("../utils/UserBodyResponseConstructor");
 
@@ -28,18 +26,19 @@ const login = async (req, res, next) => {
         failAuth();
         return;
     }
-    const isValidPassword = await bcrypt.compare(password, user.password);
-    if (!isValidPassword) {
+    const isPasswordValid = await UserModel.verifyPassword(
+        password,
+        user.password
+    );
+    if (!isPasswordValid) {
         failAuth();
         return;
     }
-    const token = jwt.sign(
-        { id: user._id, subscription: user.subscription },
-        process.env.JWT_SECRET
-    );
-    user.token = token;
-    user.save();
-    res.status(200).json({ token, user: new UserBodyResponse(user) });
+    UserModel.createJWT(user);
+    res.status(200).json({
+        token: user.token,
+        user: new UserBodyResponse(user),
+    });
 };
 const logout = async (req, res, next) => {
     req.user.token = "";
