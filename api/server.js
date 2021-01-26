@@ -6,6 +6,7 @@ const dotenv = require("dotenv");
 const contactsRouter = require("./contacts/contacts.router");
 const authRouter = require("./auth/auth.router");
 const usersRouter = require("./users/users.router");
+const path = require("path");
 
 dotenv.config();
 
@@ -22,6 +23,7 @@ module.exports = class Server {
         this.initRoutes();
         this.initServerErrorHandler();
         this.startListening();
+        this.initStaticMiddleware();
     }
     initServer() {
         this.server = express();
@@ -58,5 +60,8 @@ module.exports = class Server {
         this.server.use((error, req, res, next) => {
             res.status(500).json({ message: error.message });
         });
+    }
+    initStaticMiddleware() {
+        this.server.use(express.static(path.join(__dirname, "./public")));
     }
 };

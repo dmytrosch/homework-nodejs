@@ -1,10 +1,11 @@
 const mongoose = require("mongoose");
 const bcrypt = require("bcrypt");
-const jwt = require('jsonwebtoken')
+const jwt = require("jsonwebtoken");
 
 const userSchema = new mongoose.Schema({
     email: { type: String, required: true, unique: true },
     password: { type: String, required: true },
+    avatarURL: String,
     subscription: {
         type: String,
         enum: ["free", "pro", "premium"],
@@ -14,21 +15,22 @@ const userSchema = new mongoose.Schema({
 });
 const UserModel = mongoose.model("user", userSchema);
 
-UserModel.hashPassword = async (password) => {
+UserModel.hashPassword = async function (password){
     const hashedPassword = await bcrypt.hash(password, 6);
     return hashedPassword;
 };
-UserModel.verifyPassword = async (password, hashedPassword) => {
-    const isPasswordValid = await bcrypt.compare(password, hashedPassword);
+userSchema.methods.verifyPassword = async (password) => {
+    const isPasswordValid = await bcrypt.compare(password, this.password);
     return isPasswordValid;
 };
-UserModel.createJWT = (user) => {
+
+userSchema.methods.createJWT = () => {
     const token = jwt.sign(
-        { id: user._id, subscription: user.subscription },
+        { id: this._id, subscription: this.subscription },
         process.env.JWT_SECRET
     );
-    user.token = token;
-    user.save();
+    this.token = token;
+    this.save();
 };
 
 module.exports = UserModel;

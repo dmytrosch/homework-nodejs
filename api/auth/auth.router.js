@@ -1,5 +1,7 @@
 const express = require("express");
 const asyncWrapper = require("../utils/asyncWrapper");
+const multer  = require('multer')
+const upload = multer({ dest: 'uploads/' })
 const {
     register,
     credentialsValidation,
