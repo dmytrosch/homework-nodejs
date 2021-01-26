@@ -15,7 +15,7 @@ const userSchema = new mongoose.Schema({
 });
 const UserModel = mongoose.model("user", userSchema);
 
-UserModel.hashPassword = async function (password){
+userSchema.statics.hashPassword = async function (password){
     const hashedPassword = await bcrypt.hash(password, 6);
     return hashedPassword;
 };
