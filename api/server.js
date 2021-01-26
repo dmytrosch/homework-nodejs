@@ -4,22 +4,26 @@ const morgan = require("morgan");
 const mongoose = require("mongoose");
 const dotenv = require("dotenv");
 const contactsRouter = require("./contacts/contacts.router");
+const authRouter = require("./auth/auth.router");
+const usersRouter = require("./users/users.router");
+const path = require("path");
 
 dotenv.config();
 
-module.exports = class UsersServer {
+module.exports = class Server {
     constructor() {
         this.server = null;
         this.port = process.env.PORT || 8080;
         this.db_url = process.env.MONGO_DB_URL;
     }
-    start() {
+    async start() {
         this.initServer();
-        this.connectToDB();
+        await this.connectToDB();
         this.initMiddlewares();
         this.initRoutes();
         this.initServerErrorHandler();
         this.startListening();
+        this.initStaticMiddleware();
     }
     initServer() {
         this.server = express();
@@ -44,6 +48,8 @@ module.exports = class UsersServer {
     }
     initRoutes() {
         this.server.use("/api/contacts", contactsRouter);
+        this.server.use("/api/auth", authRouter);
+        this.server.use("/api/users", usersRouter);
     }
     startListening() {
         this.server.listen(this.port, () =>
@@ -54,5 +60,8 @@ module.exports = class UsersServer {
         this.server.use((error, req, res, next) => {
             res.status(500).json({ message: error.message });
         });
+    }
+    initStaticMiddleware() {
+        this.server.use(express.static(path.join(__dirname, "./public")));
     }
 };
