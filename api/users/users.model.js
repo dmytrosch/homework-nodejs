@@ -13,18 +13,16 @@ const userSchema = new mongoose.Schema({
     },
     token: { type: String, default: "" },
 });
-const UserModel = mongoose.model("user", userSchema);
-
-userSchema.statics.hashPassword = async function (password){
+userSchema.statics.hashPassword = async function (password) {
     const hashedPassword = await bcrypt.hash(password, 6);
     return hashedPassword;
 };
-userSchema.methods.verifyPassword = async (password) => {
+userSchema.methods.verifyPassword = async function (password) {
     const isPasswordValid = await bcrypt.compare(password, this.password);
     return isPasswordValid;
 };
 
-userSchema.methods.createJWT = () => {
+userSchema.methods.createJWT = function () {
     const token = jwt.sign(
         { id: this._id, subscription: this.subscription },
         process.env.JWT_SECRET
@@ -32,5 +30,6 @@ userSchema.methods.createJWT = () => {
     this.token = token;
     this.save();
 };
+const UserModel = mongoose.model("user", userSchema);
 
 module.exports = UserModel;
