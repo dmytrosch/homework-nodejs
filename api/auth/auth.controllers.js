@@ -3,6 +3,7 @@ const UserModel = require("../users/users.model");
 const UserBodyResponse = require("../utils/UserBodyResponseConstructor");
 const generateAvatar = require("../utils/avatarGenerator");
 const imageMinimize = require("../utils/imageMinimize");
+const path = require("path");
 
 const register = async (req, res, next) => {
     const { password, email } = req.body;
@@ -13,15 +14,14 @@ const register = async (req, res, next) => {
         return;
     }
     const avatar = await generateAvatar(email);
-    await imageMinimize();
-    const avatarURL = `http://localhost:${process.env.PORT}/images/${avatar}.png`;
+    await imageMinimize(avatar);
+    const avatarURL = `http://localhost:${process.env.PORT}/images/${avatar}`;
 
-    const user = await UserModel.create({
-        email,
-        password: hashedPassword,
-        avatarURL,
-    });
-    res.status(201).json({ user: new UserBodyResponse(user) });
+    // const user = await UserModel.create({
+    //     email,
+    //     password: hashedPassword,
+    // });
+    res.status(201).json({ message: 'hello' });
 };
 const login = async (req, res, next) => {
     const { password, email } = req.body;
