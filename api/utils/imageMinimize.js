@@ -2,11 +2,11 @@ const imagemin = require("imagemin");
 const imageminJpegtran = require("imagemin-jpegtran");
 const imageminPngquant = require("imagemin-pngquant");
 const path = require("path");
+const getAvatarUrl = require("./createAvatarURL");
 
 module.exports = async function (filename) {
-    console.log("sourcePath", filename);
     try {
-        const file = await imagemin([`tmp/${filename}`], {
+        await imagemin([`tmp/${filename}`], {
             destination: path.join(__dirname, "../public/images"),
             plugins: [
                 imageminJpegtran(),
@@ -15,8 +15,8 @@ module.exports = async function (filename) {
                 }),
             ],
         });
-        console.log(file, "file");
+        return getAvatarUrl(filename);
     } catch (err) {
-        console.log("catch err: ", err);
+        throw new Error(err);
     }
 };

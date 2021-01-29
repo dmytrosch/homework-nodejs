@@ -22,8 +22,8 @@ module.exports = class Server {
         this.initMiddlewares();
         this.initRoutes();
         this.initServerErrorHandler();
-        this.startListening();
         this.initStaticMiddleware();
+        return this.startListening();
     }
     initServer() {
         this.server = express();
@@ -52,7 +52,7 @@ module.exports = class Server {
         this.server.use("/api/users", usersRouter);
     }
     startListening() {
-        this.server.listen(this.port, () =>
+        return this.server.listen(this.port, () =>
             console.log("server started on port ", this.port)
         );
     }

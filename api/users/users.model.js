@@ -1,6 +1,10 @@
 const mongoose = require("mongoose");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+const generateAvatar = require("../utils/avatarGenerator");
+const path = require("path");
+const createAvatarURL = require("../utils/createAvatarURL");
+const fileMove = require("../utils/fileMove");
 
 const userSchema = new mongoose.Schema({
     email: { type: String, required: true, unique: true },
@@ -28,6 +32,16 @@ userSchema.methods.createJWT = function () {
         process.env.JWT_SECRET
     );
     this.token = token;
+    this.save();
+};
+userSchema.methods.createAvatar = async function () {
+    const avatar = await generateAvatar(this.email);
+    await fileMove(
+        path.join(process.cwd(), "tmp", avatar),
+        path.join(process.cwd(), "api/public/images", avatar)
+    );
+    const avatarURL = createAvatarURL(avatar);
+    this.avatarURL = avatarURL;
     this.save();
 };
 const UserModel = mongoose.model("user", userSchema);
