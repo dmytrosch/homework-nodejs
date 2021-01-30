@@ -2,14 +2,14 @@ const supertest = require("supertest");
 const Server = require("../server.js");
 const UserModel = require("../users/users.model");
 
-describe("Auth acceptance tests", () => {
+describe("Acceptance tests of auth endpoints", () => {
     let server;
     beforeAll(async () => {
         const _server = new Server();
         server = await _server.start();
     });
     afterAll(() => {
-        server.close();
+        server = null
     });
     describe("POST /register", () => {
         describe("when user exists", () => {
@@ -50,7 +50,7 @@ describe("Auth acceptance tests", () => {
         describe("when everything is fine", () => {
             const email = "qwerty_iamhere@test.top";
             test("return 201", async () => {
-                await supertest(server)
+                const response = await supertest(server)
                     .post("/api/auth/register")
                     .set("Content-Type", "application/json")
                     .send({
@@ -58,6 +58,9 @@ describe("Auth acceptance tests", () => {
                         password: "javascriptisthebest",
                     })
                     .expect(201);
+                expect(response.body.user).toHaveProperty("email");
+                const user = await UserModel.findOne({ email });
+                expect(user).toBeTruthy();
             });
             afterAll(async () => {
                 await UserModel.findOneAndDelete({ email });

@@ -7,7 +7,6 @@ const contactsRouter = require("./contacts/contacts.router");
 const authRouter = require("./auth/auth.router");
 const usersRouter = require("./users/users.router");
 const path = require("path");
-
 dotenv.config();
 
 module.exports = class Server {
