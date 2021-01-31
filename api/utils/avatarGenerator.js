@@ -18,8 +18,8 @@ module.exports = async function (email) {
     });
     const variant = "male"; // By default 'male' and 'female' supported
     const image = await avatar.generate(email, variant);
-    const filename = `avatar_${email}_${Date.now()}`;
-    image.png().toFile(`tmp/${filename}.png`);
+    const filename = `${Date.now()}.png`;
+    await image.png().toFile(`tmp/${filename}`);
     return filename;
 };
 // Now `image` contains sharp image pipeline http://sharp.pixelplumbing.com/en/stable/api-output/

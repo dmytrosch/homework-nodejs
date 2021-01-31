@@ -1,8 +1,6 @@
 const joi = require("joi");
 const UserModel = require("../users/users.model");
 const UserBodyResponse = require("../utils/UserBodyResponseConstructor");
-const generateAvatar = require("../utils/avatarGenerator");
-const imageMinimize = require("../utils/imageMinimize");
 
 const register = async (req, res, next) => {
     const { password, email } = req.body;
@@ -12,15 +10,11 @@ const register = async (req, res, next) => {
         res.status(409).json({ message: "Email in use!" });
         return;
     }
-    const avatar = await generateAvatar(email);
-    await imageMinimize();
-    const avatarURL = `http://localhost:${process.env.PORT}/images/${avatar}.png`;
-
     const user = await UserModel.create({
         email,
         password: hashedPassword,
-        avatarURL,
     });
+    await user.createAvatar()
     res.status(201).json({ user: new UserBodyResponse(user) });
 };
 const login = async (req, res, next) => {
