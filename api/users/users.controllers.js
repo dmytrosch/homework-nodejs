@@ -2,7 +2,6 @@ const UsersModel = require("./users.model");
 const UserBodyResponse = require("../utils/UserBodyResponseConstructor");
 const joi = require("joi");
 const imageMinimize = require("../utils/imageMinimize");
-const UserModel = require("../../../../pull/node/5/api/users/model");
 
 const gettingCurrentUser = (req, res, next) => {
     res.status(200).json(new UserBodyResponse(req.user));
