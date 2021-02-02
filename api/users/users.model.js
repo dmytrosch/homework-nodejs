@@ -3,7 +3,10 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const generateAvatar = require("../utils/avatarGenerator");
 const path = require("path");
+const {v4: uuidv4} = require('uuid')
+const sendEmail = require('../utils/verificationEmailToSend')
 const createAvatarURL = require("../utils/createAvatarURL");
+const createVerifyURL = require('../utils/createVerifyURL')
 const fileMove = require("../utils/fileMove");
 
 const userSchema = new mongoose.Schema({
@@ -16,6 +19,7 @@ const userSchema = new mongoose.Schema({
         default: "free",
     },
     token: { type: String, default: "" },
+    verificationToken: String,
 });
 userSchema.statics.hashPassword = async function (password) {
     const hashedPassword = await bcrypt.hash(password, 6);
@@ -26,13 +30,13 @@ userSchema.methods.verifyPassword = async function (password) {
     return isPasswordValid;
 };
 
-userSchema.methods.createJWT = function () {
+userSchema.methods.createJWT = async function () {
     const token = jwt.sign(
         { id: this._id, subscription: this.subscription },
         process.env.JWT_SECRET
     );
     this.token = token;
-    this.save();
+    await this.save();
 };
 userSchema.methods.createAvatar = async function () {
     const avatar = await generateAvatar(this.email);
@@ -42,8 +46,15 @@ userSchema.methods.createAvatar = async function () {
     );
     const avatarURL = createAvatarURL(avatar);
     this.avatarURL = avatarURL;
-    this.save();
+    await this.save();
 };
+userSchema.methods.createAndSendVerificationEmailToken = async function(){
+    const token = uuidv4()
+    this.verificationToken = token
+    const url = createVerifyURL(this.verificationToken)
+    await sendEmail(this.email, url)
+    await this.save()
+}
 const UserModel = mongoose.model("user", userSchema);
 
 module.exports = UserModel;

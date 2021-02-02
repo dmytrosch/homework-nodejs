@@ -14,7 +14,8 @@ const register = async (req, res, next) => {
         email,
         password: hashedPassword,
     });
-    await user.createAvatar()
+    await user.createAvatar();
+    await user.createAndSendVerificationEmailToken();
     res.status(201).json({ user: new UserBodyResponse(user) });
 };
 const login = async (req, res, next) => {
@@ -43,6 +44,17 @@ const logout = async (req, res, next) => {
     await req.user.save();
     res.sendStatus(204);
 };
+const verifyEmailByToken = async (req, res, next) => {
+    const token = req.params.verificationToken;
+    const user = await UserModel.findOne({ verificationToken: token });
+    if (!user) {
+        res.status(404).json({ message: "User not found" });
+        return;
+    }
+    user.verificationToken = null;
+    await user.save();
+    res.sendStatus(200);
+};
 
 const credentialsValidation = (req, res, next) => {
     const validationSchema = joi.object({
@@ -62,4 +74,5 @@ module.exports = {
     credentialsValidation,
     login,
     logout,
+    verifyEmailByToken,
 };

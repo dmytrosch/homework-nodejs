@@ -20,7 +20,7 @@ describe("Acceptance tests of user endpoints", () => {
     });
     afterAll(async () => {
         await UserModel.findByIdAndDelete(userDoc._id);
-        server = null;
+        await server.stop();
     });
     describe("GET /current", () => {
         describe("when auth token is invalid", () => {
