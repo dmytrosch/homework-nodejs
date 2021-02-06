@@ -63,4 +63,12 @@ module.exports = class Server {
     initStaticMiddleware() {
         this.server.use(express.static(path.join(__dirname, "./public")));
     }
+    async stop() {
+        await mongoose.disconnect();
+        await this.close(() => {
+            console.log("Server stopped gracefully");
+            process.exit(0);
+        });
+        this.server = null
+    }
 };
